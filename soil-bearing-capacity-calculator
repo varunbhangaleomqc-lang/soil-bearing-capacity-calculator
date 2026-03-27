@@ -1,0 +1,31 @@
+import math
+
+# Terzaghi Bearing Capacity Calculation
+
+def calculate_sbc(c, gamma, Df, B, phi):
+    phi_rad = math.radians(phi)
+
+    Nq = math.exp(math.pi * math.tan(phi_rad)) * (math.tan(math.radians(45 + phi/2)))**2
+    Nc = (Nq - 1) / math.tan(phi_rad) if phi != 0 else 5.7
+    Ngamma = 2 * (Nq + 1) * math.tan(phi_rad)
+
+    qu = (c * Nc) + (gamma * Df * Nq) + (0.5 * gamma * B * Ngamma)
+
+    return qu
+
+
+# INPUTS
+c = float(input("Enter cohesion (kN/m2): "))
+gamma = float(input("Enter unit weight (kN/m3): "))
+Df = float(input("Enter depth of foundation (m): "))
+B = float(input("Enter width of footing (m): "))
+phi = float(input("Enter angle of internal friction (degrees): "))
+
+# CALCULATION
+ultimate_sbc = calculate_sbc(c, gamma, Df, B, phi)
+
+# Assuming FOS = 3
+safe_sbc = ultimate_sbc / 3
+
+print("\nUltimate Bearing Capacity:", round(ultimate_sbc, 2), "kN/m2")
+print("Safe Bearing Capacity:", round(safe_sbc, 2), "kN/m2")
